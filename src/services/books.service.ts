@@ -23,7 +23,10 @@ const listBooksService = async () => {
         createdAt: 'DESC',
       }, take: 3, where: { category: categoryArray[i], archived: false }
     })
-    bookList.push(books)
+    bookList.push({
+      category: categoryArray[i],
+      books
+    })
   }
   return bookList;
 }

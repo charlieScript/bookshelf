@@ -56,7 +56,7 @@ export const editBook: RequestHandler = async (req, res) => {
       return res.status(401).json({ message: 'insufficient rights' });
     }
     upload(req, res, async (err) => {
-      const title = req.body.title;
+      const title = req.params.id;
       const author = req.body.author;
       const category = req.body.category;
       const description = req.body.description;
