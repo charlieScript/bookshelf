@@ -7,21 +7,22 @@ import {
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
+import { ROLES } from './enums/category.enum';
 
 @Entity('users')
-@Unique(['name', 'email'])
+@Unique(['email'])
 export class User {
   @PrimaryGeneratedColumn('uuid')
   readonly id: number;
-
-  @Column()
-  name: string;
 
   @Column()
   email: string;
 
   @Column()
   password: string;
+
+  @Column({ enum: ROLES, default: ROLES.READER })
+  ROLE: ROLES
 
   @CreateDateColumn()
   readonly createdAt: Date;

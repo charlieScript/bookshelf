@@ -1,4 +1,6 @@
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -11,7 +13,7 @@ import { CATEGORY } from './enums/category.enum';
 
 @Entity('books')
 @Unique(['title'])
-export class Books {
+export class Book {
   @PrimaryGeneratedColumn('uuid')
   readonly id: number;
 
@@ -22,10 +24,10 @@ export class Books {
   author: string;
 
   @Column({ enum: CATEGORY })
-  categories: CATEGORY;
+  category: CATEGORY;
 
   @Column()
-  bookcover: string;
+  book_cover_url: string;
 
   @Column()
   description: string;
@@ -44,4 +46,12 @@ export class Books {
 
   @VersionColumn()
   readonly version: number;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  nameToUpperCase() {
+    this.title = this.title.toLowerCase()
+    this.description = this.description.toLowerCase()
+    this.author = this.author.toLowerCase()
+  }
 }
