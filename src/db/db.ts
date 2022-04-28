@@ -4,7 +4,7 @@ import { DataSource } from "typeorm";
 export const connectionSource = new DataSource({
   migrationsTableName: 'migrations',
   type: 'sqlite',
-  database: 'bookshelf.sqlite',
+  database: 'books.sqlite',
   logging: false,
   synchronize: true,
   name: 'default',
