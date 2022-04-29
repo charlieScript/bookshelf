@@ -205,7 +205,7 @@ Example response body:
 
 `GET /api/book/admin`
 
-RETURNS - 3 array of books
+RETURNS - array of books
 
 Example response body:
 
