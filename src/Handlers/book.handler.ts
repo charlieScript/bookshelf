@@ -80,7 +80,7 @@ export const editBook: RequestHandler = async (req, res) => {
       if (!success) {
         return res.status(status).json({ success, error });
       }
-      return res.status(status).json({ success, message });
+      return res.status(status).json({ success, message, data });
     });
   } catch (error) {
     logger.error(error);
