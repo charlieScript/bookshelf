@@ -1,14 +1,14 @@
 import joi from 'joi';
-import { archiveBookService, createBookService, editBookService, findBookService, listBooksAdminService, listBooksService } from '../services/books.service';
+import { archiveBookService, createBookService, editBookService, findBookByIdService, findBookByTitleService, listBooksAdminService, listBooksService } from '../services/books.service';
 import { CATEGORY } from 'src/entities/enums/category.enum';
 
 // Interface for expected response
 interface IHelperResponse {
   success: boolean;
   status: number;
-  data?: { book?: any };
+  data?: { book?: any; };
   error?: string;
-  message?: string | null
+  message?: string | null;
 }
 
 export const addBookController = async (title: string, author: string, category: CATEGORY, book_cover_url: string, description: string, publication_date: string, archived: boolean): Promise<IHelperResponse> => {
@@ -32,7 +32,7 @@ export const addBookController = async (title: string, author: string, category:
     }
 
     // check for existing book
-    const existingBook = await findBookService(title);
+    const existingBook = await findBookByTitleService(title);
     if (existingBook) {
       return {
         success: false,
@@ -56,9 +56,12 @@ export const addBookController = async (title: string, author: string, category:
   }
 };
 
-export const editBookController = async (title: string, author: string, category: CATEGORY, book_cover_url: string, description: string, publication_date: string, archived: boolean): Promise<IHelperResponse> => {
+export const editBookController = async (id: number, title: string, author: string, category: CATEGORY, book_cover_url: string, description: string, publication_date: string, archived: boolean): Promise<IHelperResponse> => {
+  console.log(id);
+
   try {
     const validationSchema = joi.object({
+      id: joi.string().uuid().required(),
       title: joi.string().required(),
       author: joi.string().required(),
       category: joi.string().required(),
@@ -67,7 +70,7 @@ export const editBookController = async (title: string, author: string, category
       archived: joi.boolean().required()
     });
 
-    const validationResult = validationSchema.validate({ title, author, category, description, publication_date, archived });
+    const validationResult = validationSchema.validate({ id, title, author, category, description, publication_date, archived });
     if (validationResult.error) {
       return {
         success: false,
@@ -77,9 +80,9 @@ export const editBookController = async (title: string, author: string, category
     }
 
     // check for existing book
-    const existingBook = await findBookService(title);
+    const existingBook = await findBookByIdService(id);
     if (existingBook) {
-      const book = await editBookService(title, author, category, book_cover_url, description, publication_date, archived);
+      const book = await editBookService(id, title, author, category, book_cover_url, description, publication_date, archived);
       return {
         success: true,
         status: 200,
@@ -101,14 +104,14 @@ export const editBookController = async (title: string, author: string, category
   }
 };
 
-export const archiveBookController = async (title: string, archived: boolean): Promise<IHelperResponse> => {
+export const archiveBookController = async (id: number, archived: boolean): Promise<IHelperResponse> => {
   try {
     const validationSchema = joi.object({
-      title: joi.string().required(),
+      id: joi.string().required(),
       archived: joi.boolean().required()
     });
 
-    const validationResult = validationSchema.validate({ title, archived });
+    const validationResult = validationSchema.validate({ id, archived });
     if (validationResult.error) {
       return {
         success: false,
@@ -118,13 +121,13 @@ export const archiveBookController = async (title: string, archived: boolean): P
     }
 
     // check for existing book
-    const existingBook = await findBookService(title);
+    const existingBook = await findBookByIdService(id);
     if (existingBook) {
 
-      const book = await archiveBookService(title, archived);
-      
+      const book = await archiveBookService(id, archived);
+
       //@ts-ignore
-      let message = Boolean(archived ) ? 'Book successfully archived' : 'Book successfully unarchived'
+      let message = Boolean(archived) ? 'Book successfully archived' : 'Book successfully unarchived';
       return {
         success: true,
         status: 200,
@@ -147,12 +150,12 @@ export const archiveBookController = async (title: string, archived: boolean): P
 };
 
 export const getAllBooksUserController = async () => {
-  const books = await listBooksService()
-  return books
-}
+  const books = await listBooksService();
+  return books;
+};
 
 export const getAllBooksAdminController = async () => {
   const books = await listBooksAdminService();
   return books;
-}
+};
 

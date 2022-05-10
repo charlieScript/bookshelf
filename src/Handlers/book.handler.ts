@@ -75,7 +75,7 @@ export const editBook: RequestHandler = async (req, res) => {
       console.log(category);
 
       // @ts-ignore
-      const { success, error, status, data, message } = await editBookController(title, author, category, book_cover_url, description, publication_date, archived);
+      const { success, error, status, data, message } = await editBookController(req.params.id, title, author, category, book_cover_url, description, publication_date, archived);
 
       if (!success) {
         return res.status(status).json({ success, error });
@@ -97,14 +97,14 @@ export const archiveBook: RequestHandler = async (req, res) => {
   try {
     //@ts-ignore
 
-    const { title, archived } = req.body;
+    const { archived } = req.body;
     // @ts-ignore
-    const { success, error, status, data, message } = await archiveBookController(title, archived);
+    const { success, error, status, data, message } = await archiveBookController(req.params.id, archived);
 
     if (!success) {
       return res.status(status).json({ success, error });
     }
-    return res.status(status).json({ success, message, data });
+    return res.status(status).json({ success, message });
   } catch (error) {
     logger.error(error);
     console.log(error);

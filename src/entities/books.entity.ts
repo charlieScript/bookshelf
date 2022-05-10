@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Exclusion,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
@@ -50,8 +51,8 @@ export class Book {
   @BeforeInsert()
   @BeforeUpdate()
   nameToUpperCase() {
-    this.title = this.title.toLowerCase()
-    this.description = this.description.toLowerCase()
-    this.author = this.author.toLowerCase()
+    this.title = this.title.toLowerCase();
+    this.description = this.description.toLowerCase();
+    this.author = this.author.toLowerCase();
   }
 }
