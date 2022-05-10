@@ -7,7 +7,7 @@ const upload = multer({ dest: 'public/' });
 const router = Router();
 router.post('/add', protect, createBook);
 router.put('/edit/:id', protect, editBook);
-router.get('/', listBookUser);
+router.get('/', protect, listBookUser);
 router.get('/admin', protect, listBookAdmin);
 router.put('/archive/:id', protect, archiveBook);
 
